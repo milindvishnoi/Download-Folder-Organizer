@@ -1,8 +1,8 @@
-import sys, os
+import os
 import time
-import logging
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from app.locations import *
 
 
 class ShiftingFiles(FileSystemEventHandler):
@@ -10,24 +10,33 @@ class ShiftingFiles(FileSystemEventHandler):
     This class is going to allow us to override the FileSystemEventHandler
     methods.
     """
+    # Overriding the on_modified() method of FileSystemEventHandler class
+    # in the watchdog API
     def on_modified(self, event):
-        # path = "/Users/milindvishnoi/Desktop/test"
-        for file_name in os.listdir(path):
-            print(file_name)
+        self.shift()
+
+    def shift(self):
+        for file_name in os.listdir(download_folder):
+            os.rename(download_folder + "/" + file_name,
+                      transfer_folder + "/" + file_name)
+
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s - %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S')
-    # path = sys.argv[1] if len(sys.argv) > 1 else '.'
-    path = "/Users/milindvishnoi/Desktop/test"
+    # To set location
+    download_folder = download_location
+    transfer_folder = transfer_location
+
+    # To shift the files as soon as the program is run
+    ShiftingFiles().shift()
+
+    # Consuming watchdog API
     event_handler = ShiftingFiles()
     observer = Observer()
-    observer.schedule(event_handler, path, recursive=True)
+    observer.schedule(event_handler, download_folder, recursive=False)
     observer.start()
     try:
         while True:
-            time.sleep(10)
+            time.sleep(100)
     except KeyboardInterrupt:
         observer.stop()
     observer.join()

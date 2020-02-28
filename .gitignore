@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# MAC and Pycharm Additional Files
+.DS_Store
+.idea/DownloadCleaner.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
