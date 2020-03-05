@@ -1,2 +1,8 @@
 download_location = "/Users/milindvishnoi/Desktop/test"
 transfer_location = "/Users/milindvishnoi/Desktop/files"
+photo_location = "/Users/milindvishnoi/Desktop/photos"
+document_location = "/Users/milindvishnoi/Desktop/documents"
+folder_location = "/Users/milindvishnoi/Desktop/folders"
+music_location = "/Users/milindvishnoi/Desktop/music"
+zipfile_location = "/Users/milindvishnoi/Desktop/zipFiles"
+video_location = "/Users/milindvishnoi/Desktop/videos"
