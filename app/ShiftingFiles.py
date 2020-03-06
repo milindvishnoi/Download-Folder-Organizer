@@ -22,7 +22,7 @@ class ShiftingFiles(FileSystemEventHandler):
                       transfer_folder + "/" + file_name)
 
     def which_loaction(self, file_name: str):
-        if file_name.find(".") != -1:
+        if os.path.isfile(download_folder + file_name):
             file_ext = file_name.split(".")[1]
             if file_ext == "jpg":
                 return photo_location
@@ -59,6 +59,7 @@ if __name__ == "__main__":
     observer.join()
 
 
-    # lst = ["photos", "documents", "folders", "music", "zipFiles", "videos"]
+    # lst = ["photos", "documents", "folders", "music", "zipFiles", "videos",
+    #       "others"]
     # for folderName in lst:
     #     os.mkdir("/Users/milindvishnoi/Desktop/" + folderName)
