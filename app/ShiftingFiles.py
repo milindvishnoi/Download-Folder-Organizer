@@ -17,12 +17,24 @@ class ShiftingFiles(FileSystemEventHandler):
         self.shift()
 
     def shift(self):
-        for file_name in os.listdir(download_folder):
-            transfer_folder = self.which_loaction(file_name)
-            os.rename(download_folder + "/" + file_name,
-                      transfer_folder + "/" + file_name)
+        """
+        This function shifts all the files from one location to another,
+        excluding the folders that are created by create folder function.
+        :return:
+        """
+        existing_files = os.listdir(download_location)
+        for file_name in existing_files:
+            if file_name not in folders:
+                transfer_folder = self.which_location(file_name)
+                os.rename(os.path.join(download_location, file_name),
+                          os.path.join(transfer_folder, file_name))
 
-    def which_loaction(self, file_name: str):
+    def which_location(self, file_name: str):
+        """
+        This function decides what location is suitable for a kind of file
+        :param file_name:
+        :return: location in string format
+        """
         if file_name.find(".") != -1:
             file_ext = file_name.split(".")[1]
             if file_ext == "jpg":
@@ -37,14 +49,24 @@ class ShiftingFiles(FileSystemEventHandler):
                 return video_location
             return transfer_location
         else:
-            if os.path.isdir(download_folder + file_name):
+            if os.path.isdir(os.path.join(download_location, file_name)):
                 return folder_location
             return transfer_location
 
 
+def create_folders():
+    for folder_name in folders:
+        existing_folders = os.listdir(download_location)
+        if folder_name not in existing_folders:
+            os.mkdir(os.path.join(download_location, folder_name))
+
+
 if __name__ == "__main__":
-    # To set location
-    download_folder = download_location
+    # The folders that need to be created
+    folders = ["photos", "documents", "folders", "music", "zipFiles", "videos",
+               "others"]
+    # To create separate folders to organize data in
+    create_folders()
 
     # To shift the files as soon as the program is run
     ShiftingFiles().shift()
@@ -52,7 +74,7 @@ if __name__ == "__main__":
     # Consuming watchdog API
     event_handler = ShiftingFiles()
     observer = Observer()
-    observer.schedule(event_handler, download_folder, recursive=False)
+    observer.schedule(event_handler, download_location, recursive=False)
     observer.start()
     try:
         while True:
@@ -60,9 +82,3 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
-
-
-    # lst = ["photos", "documents", "folders", "music", "zipFiles", "videos",
-    #       "others"]
-    # for folderName in lst:
-    #     os.mkdir("/Users/milindvishnoi/Desktop/" + folderName)
