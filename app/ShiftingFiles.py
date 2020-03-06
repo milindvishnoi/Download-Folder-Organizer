@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import time
 from watchdog.observers import Observer
@@ -22,7 +23,7 @@ class ShiftingFiles(FileSystemEventHandler):
                       transfer_folder + "/" + file_name)
 
     def which_loaction(self, file_name: str):
-        if os.path.isfile(download_folder + file_name):
+        if file_name.find(".") != -1:
             file_ext = file_name.split(".")[1]
             if file_ext == "jpg":
                 return photo_location
@@ -36,7 +37,9 @@ class ShiftingFiles(FileSystemEventHandler):
                 return video_location
             return transfer_location
         else:
-            return folder_location
+            if os.path.isdir(download_folder + file_name):
+                return folder_location
+            return transfer_location
 
 
 if __name__ == "__main__":
