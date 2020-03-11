@@ -3,7 +3,6 @@ import os
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from app.locations import *
 
 
 class ShiftingFiles(FileSystemEventHandler):
@@ -62,6 +61,17 @@ def create_folders():
 
 
 if __name__ == "__main__":
+    # To specify all the locations making it dynamic
+    username = os.getcwd().split("/")[2]
+    download_location = "/Users/" + username + "/Desktop/test"
+    transfer_location = "/Users/" + username + "/Desktop/files"
+    photo_location = "/Users/" + username + "/Desktop/photos"
+    document_location = "/Users/" + username + "/Desktop/documents"
+    folder_location = "/Users/" + username + "/Desktop/folders"
+    music_location = "/Users/" + username + "/Desktop/music"
+    zipfile_location = "/Users/" + username + "/Desktop/zipFiles"
+    video_location = "/Users/" + username + "/Desktop/videos"
+
     # The folders that need to be created
     folders = ["photos", "documents", "folders", "music", "zipFiles", "videos",
                "others"]
