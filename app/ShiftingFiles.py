@@ -24,9 +24,10 @@ class ShiftingFiles(FileSystemEventHandler):
         existing_files = os.listdir(download_location)
         for file_name in existing_files:
             if file_name not in folders:
-                transfer_folder = self.which_location(file_name)
-                os.rename(os.path.join(download_location, file_name),
-                          os.path.join(transfer_folder, file_name))
+                if file_name != ".DS_Store":
+                    transfer_folder = self.which_location(file_name)
+                    os.rename(os.path.join(download_location, file_name),
+                              os.path.join(transfer_folder, file_name))
 
     def which_location(self, file_name: str):
         """
@@ -35,22 +36,23 @@ class ShiftingFiles(FileSystemEventHandler):
         :return: location in string format
         """
         if file_name.find(".") != -1:
-            file_ext = file_name.split(".")[1]
-            if file_ext == "jpg":
+            temp = file_name.split(".")
+            file_ext = temp[len(temp) - 1]
+            if file_ext in ["jpg", "tiff", "gif", "png", "raw"]:
                 return photo_location
-            if file_ext == "mp3":
+            if file_ext in ["mp3", "wav"]:
                 return music_location
-            if file_ext == "pdf":
+            if file_ext in ["pdf", "txt", "docs"]:
                 return document_location
             if file_ext == "zip":
                 return zipfile_location
-            if file_ext == "mp4":
+            if file_ext in ["mp4", "avi", "mov", "wmv", "flv"]:
                 return video_location
-            return transfer_location
+            return other_location
         else:
             if os.path.isdir(os.path.join(download_location, file_name)):
                 return folder_location
-            return transfer_location
+            return other_location
 
 
 def create_folders():
@@ -61,16 +63,17 @@ def create_folders():
 
 
 if __name__ == "__main__":
-    # To specify all the locations making it dynamic
+    # To specify all the locations making location for every
+    # user dynamic produced
     username = os.getcwd().split("/")[2]
-    download_location = "/Users/" + username + "/Desktop/test"
-    transfer_location = "/Users/" + username + "/Desktop/files"
-    photo_location = "/Users/" + username + "/Desktop/photos"
-    document_location = "/Users/" + username + "/Desktop/documents"
-    folder_location = "/Users/" + username + "/Desktop/folders"
-    music_location = "/Users/" + username + "/Desktop/music"
-    zipfile_location = "/Users/" + username + "/Desktop/zipFiles"
-    video_location = "/Users/" + username + "/Desktop/videos"
+    download_location = "/Users/" + username + "/Downloads"
+    other_location = os.path.join(download_location, "others")
+    photo_location = os.path.join(download_location, "photos")
+    document_location = os.path.join(download_location, "documents")
+    folder_location = os.path.join(download_location, "folders")
+    music_location = os.path.join(download_location, "music")
+    zipfile_location = os.path.join(download_location, "zipFiles")
+    video_location = os.path.join(download_location, "videos")
 
     # The folders that need to be created
     folders = ["photos", "documents", "folders", "music", "zipFiles", "videos",
@@ -88,7 +91,7 @@ if __name__ == "__main__":
     observer.start()
     try:
         while True:
-            time.sleep(100)
+            time.sleep(1000)
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
