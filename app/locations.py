@@ -1,8 +1,13 @@
-download_location = "/Users/milindvishnoi/Desktop/test"
-transfer_location = "/Users/milindvishnoi/Desktop/files"
-photo_location = "/Users/milindvishnoi/Desktop/photos"
-document_location = "/Users/milindvishnoi/Desktop/documents"
-folder_location = "/Users/milindvishnoi/Desktop/folders"
-music_location = "/Users/milindvishnoi/Desktop/music"
-zipfile_location = "/Users/milindvishnoi/Desktop/zipFiles"
-video_location = "/Users/milindvishnoi/Desktop/videos"
+import os
+
+# To specify all the locations, making location for every
+# user dynamic produced unless they edit it
+username = os.getcwd().split("/")[2]
+download_location = "/Users/" + username + "/Downloads"
+other_location = os.path.join(download_location, "others")
+photo_location = os.path.join(download_location, "photos")
+document_location = os.path.join(download_location, "documents")
+folder_location = os.path.join(download_location, "folders")
+music_location = os.path.join(download_location, "music")
+zipfile_location = os.path.join(download_location, "zipFiles")
+video_location = os.path.join(download_location, "videos")

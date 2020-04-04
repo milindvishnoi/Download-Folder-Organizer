@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-import os
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from app.locations import *
 
 
 class ShiftingFiles(FileSystemEventHandler):
@@ -10,10 +10,17 @@ class ShiftingFiles(FileSystemEventHandler):
     This class is going to allow us to override the FileSystemEventHandler
     methods.
     """
+    download_folders = ["photos", "documents", "folders", "music", "zipFiles",
+                        "videos", "others", ".DS_Store"]
+
     # Overriding the on_modified() method of FileSystemEventHandler class
     # in the watchdog API
+
     def on_modified(self, event):
-        self.shift()
+        self.check_if_downloading()
+        existing_files = os.listdir(download_location)
+        if existing_files != self.download_folders:
+            self.shift()
 
     def shift(self):
         """
@@ -21,15 +28,21 @@ class ShiftingFiles(FileSystemEventHandler):
         excluding the folders that are created by create folder function.
         :return:
         """
-        existing_files = os.listdir(download_location)
-        for file_name in existing_files:
-            if file_name not in folders:
-                if file_name != ".DS_Store":
-                    transfer_folder = self.which_location(file_name)
-                    os.rename(os.path.join(download_location, file_name),
-                              os.path.join(transfer_folder, file_name))
+        try:
+            print("Working")
+            existing_files = os.listdir(download_location)
+            for file_name in existing_files:
+                if file_name not in folders:
+                    if file_name != ".DS_Store":
+                        transfer_folder = self.which_location(file_name)
+                        os.rename(os.path.join(download_location, file_name),
+                                  os.path.join(transfer_folder, file_name))
+        except:
+            print("Error Occurred: Some thing went wrong!")
+            print("Please run me again")
+            exit()
 
-    def which_location(self, file_name: str):
+    def which_location(self, file_name):
         """
         This function decides what location is suitable for a kind of file
         :param file_name:
@@ -54,6 +67,28 @@ class ShiftingFiles(FileSystemEventHandler):
                 return folder_location
             return other_location
 
+    def check_if_downloading(self):
+        """
+        This function is used to check if there is any downloading at the
+        moment and then allows the script to shift the files.
+        :return:
+        """
+        new_files = os.listdir(download_location)
+        print(new_files)
+        for file_name in new_files:
+            temp = file_name.split(".")
+            file_ext = temp[len(temp) - 1]
+            if ".com.google.Chrome" not in file_name:
+                if "crdownload" in file_ext or "download" in file_ext:
+                    print("File Extention : " + file_ext)
+                    time.sleep(60)
+                    self.check_if_downloading()
+            else:
+                time.sleep(5)
+                self.check_if_downloading()
+        print('Return')
+        return None
+
 
 def create_folders():
     for folder_name in folders:
@@ -63,18 +98,6 @@ def create_folders():
 
 
 if __name__ == "__main__":
-    # To specify all the locations making location for every
-    # user dynamic produced
-    username = os.getcwd().split("/")[2]
-    download_location = "/Users/" + username + "/Downloads"
-    other_location = os.path.join(download_location, "others")
-    photo_location = os.path.join(download_location, "photos")
-    document_location = os.path.join(download_location, "documents")
-    folder_location = os.path.join(download_location, "folders")
-    music_location = os.path.join(download_location, "music")
-    zipfile_location = os.path.join(download_location, "zipFiles")
-    video_location = os.path.join(download_location, "videos")
-
     # The folders that need to be created
     folders = ["photos", "documents", "folders", "music", "zipFiles", "videos",
                "others"]
