@@ -2,18 +2,25 @@
 
 A Mac based app used to keep your download folder organized.
 
-## Motivation
----
+## Navigation
+- [Motivation](#motivation)
+- [Getting Started](#started)
+- [Installation](#installation)
+- [How To Use](#use)
+- [Contributing](#contributing)
+- [License](#license)
+
+## <a name="description"></a> Motivation
 
 Everytime I tried to find a file or a folder in downloads folder I never seem to locate it unless I search for it. My downloads folder has always been messy. Once I sat for about 2 hours to try to organise my files and finally gave up and ended up watching Netflix.
 
-<!-- ![A screenshot of my downloads folder](screenshot.png) -->
-<img src="screenshot.png" width="700">
+<p align="center">
+<img src="screenshot.png" width="900">
+</p>
 
 This gave me an idea to make this process easier by making an automator python script. This script organizes all the files and folders into their own repective folders inorder to organize the downloads folder. It keeps a watch to your downloads folder and keeps organizing unless you close the script
 
-## Getting Started
----
+## <a name='started'></a>Getting Started
 
 ### Prerequisite
 
@@ -21,7 +28,7 @@ It is a python script so you need to have python installed on your laptop. If yo
 
 > brew install python3
 
-### Installation
+### <a name='installation'></a> Installation
 
 To use this script and customize it you can flork the repository by clicking on the right corner of the repository with the fork sign.
 
@@ -29,18 +36,15 @@ To download the dependencies required to run the "cleaning.command" scipt file u
 
 > pip3 install -r requirements.txt
 
-After this you need to give permission to the "cleaning.command" so that it can run on your computer. First you need to get into */DownloadCleaner/app by using terminal then run this command:
+After this you need to give permission to the "cleaning.command" so that it can run on your computer. First you need to get into \*/DownloadCleaner/app by using terminal then run this command:
 
 > chmod 755 cleaning.command
 
-## How To Use
----
+## <a name="use"></a> How To Use
 
 You just need to double click on "cleaning.command". It will run the script on your computer. If you have any issues please send me a mail at -> milindvishnoi@gmail.com
 
-
-## Contributing
----
+## <a name="contribution"></a> Contributing
 
 All developers are encouraged to not only install the script but also extend and personalize it ! . All source code is available for anyone who wishes to make any tweaks.
 
@@ -54,8 +58,7 @@ All developers are encouraged to not only install the script but also extend and
 
 If you want to change the folders where the files are organized, you can change the location in "location.py" according to your choice.
 
-## License
----
+## <a name="license"></a> License
 
 The MIT License (MIT)
 
