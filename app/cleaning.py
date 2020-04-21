@@ -11,7 +11,7 @@ class ShiftingFiles(FileSystemEventHandler):
     methods.
     """
     download_folders = ["photos", "documents", "folders", "music", "zipFiles",
-                        "videos", "others", ".DS_Store"]
+                        "videos", "others", "code", ".DS_Store"]
 
     # Overriding the on_modified() method of FileSystemEventHandler class
     # in the watchdog API
@@ -76,18 +76,56 @@ class ShiftingFiles(FileSystemEventHandler):
         moment and then allows the script to shift the files.
         :return:
         """
-        new_files = os.listdir(download_location)
+        new_files = self.get_folders()
+        print(new_files)
         for file_name in new_files:
+            original_size = os.path.getsize(os.path.join(download_location,
+                                                         file_name))
             temp = file_name.split(".")
             file_ext = temp[len(temp) - 1]
+            # When download starts ".com.google.Chrome" is a temporary file
+            # created
             if ".com.google.Chrome" not in file_name:
+                final_size = os.path.getsize(os.path.join(download_location,
+                                                              file_name))
+                # To check if any file is downloading as extensions are
+                # download and crdownload while downloading
                 if "crdownload" in file_ext or "download" in file_ext:
-                    time.sleep(60)
-                    self.check_if_downloading()
+                    # To check for the files that are already downloaded and
+                    # have a file extension of download/crdownload
+                    if final_size == original_size:
+                        self.check_downloaded(file_name, original_size)
+                    else:
+                        time.sleep(60)
+                        self.check_if_downloading()
             else:
                 time.sleep(5)
                 self.check_if_downloading()
         return None
+
+    def check_downloaded(self, file_name, original_size):
+        """
+        This function is used to check if the files are already downloaded or
+        not by comparing size. This should be used when a file extension is
+        download or crdownload. We restrict the use as it is a bad way for
+        comparision
+        """
+        time.sleep(5)
+        final_size = os.path.getsize(os.path.join(download_location,
+                                                         file_name))
+        if original_size == final_size:
+            return None
+        else:
+            self.check_downloaded(file_name, original_size)
+
+    def get_folders(self):
+        """Returns the folders/files as a list except the ones we create"""
+        new_files = []
+        files = os.listdir(download_location)
+        for file in files:
+            if file not in self.download_folders:
+                new_files.append(file)
+        return new_files
 
 
 def create_folders():
@@ -100,7 +138,7 @@ def create_folders():
 if __name__ == "__main__":
     # The folders that need to be created
     folders = ["photos", "documents", "folders", "music", "zipFiles", "videos",
-               "others", "codes"]
+               "others", "code"]
     # To create separate folders to organize data in
     create_folders()
 
