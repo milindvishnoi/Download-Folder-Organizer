@@ -51,16 +51,19 @@ class ShiftingFiles(FileSystemEventHandler):
             temp = file_name.split(".")
             file_ext = temp[len(temp) - 1]
             file_ext = file_ext.lower()
-            if file_ext in ["jpg", "tiff", "gif", "png", "raw", 'jpeg']:
+            if file_ext in ["jpg", "tiff", "gif", "png", "raw", "jpeg", "CR2",
+                            "HEIC"]:
                 return photo_location
             if file_ext in ["mp3", "wav"]:
                 return music_location
-            if file_ext in ["pdf", "txt", "docs", "docx"]:
+            if file_ext in ["pdf", "txt", "docs", "docx", "ppt", "pptx"]:
                 return document_location
             if file_ext == "zip":
                 return zipfile_location
             if file_ext in ["mp4", "avi", "mov", "wmv", "flv"]:
                 return video_location
+            if file_ext in ["py", "js", "ipynb", "java", "ts"]:
+                return code_location
             return other_location
         else:
             if os.path.isdir(os.path.join(download_location, file_name)):
@@ -97,7 +100,7 @@ def create_folders():
 if __name__ == "__main__":
     # The folders that need to be created
     folders = ["photos", "documents", "folders", "music", "zipFiles", "videos",
-               "others"]
+               "others", "codes"]
     # To create separate folders to organize data in
     create_folders()
 
