@@ -12,14 +12,20 @@ class ShiftingFiles(FileSystemEventHandler):
     """
     download_folders = ["photos", "documents", "folders", "music", "zipFiles",
                         "videos", "others", "code", ".DS_Store"]
+    files = ["photos", "documents", "folders", "music", "zipFiles",
+             "videos", "others", "code", ".DS_Store"]
 
     # Overriding the on_modified() method of FileSystemEventHandler class
     # in the watchdog API
 
     def on_modified(self, event):
-        self.check_if_downloading()
-        existing_files = os.listdir(download_location)
-        if existing_files != self.download_folders:
+        new_files = []
+        files = os.listdir(download_location)
+        for file in files:
+            if file not in self.download_folders:
+                new_files.append(file)
+        if len(new_files) > 0:
+            self.check_if_downloading()
             self.shift()
 
     def shift(self):
@@ -94,12 +100,14 @@ class ShiftingFiles(FileSystemEventHandler):
                     # have a file extension of download/crdownload
                     if final_size == original_size:
                         self.check_downloaded(file_name, original_size)
+                        self.check_if_downloading()
                     else:
                         time.sleep(60)
                         self.check_if_downloading()
             else:
                 time.sleep(5)
                 self.check_if_downloading()
+        self.files = self.download_folders.copy()
         return None
 
     def check_downloaded(self, file_name, original_size):
@@ -122,7 +130,8 @@ class ShiftingFiles(FileSystemEventHandler):
         new_files = []
         files = os.listdir(download_location)
         for file in files:
-            if file not in self.download_folders:
+            if file not in self.files:
+                self.files.append(file)
                 new_files.append(file)
         return new_files
 

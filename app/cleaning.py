@@ -83,7 +83,6 @@ class ShiftingFiles(FileSystemEventHandler):
         :return:
         """
         new_files = self.get_folders()
-        print(new_files)
         for file_name in new_files:
             original_size = os.path.getsize(os.path.join(download_location,
                                                          file_name))
