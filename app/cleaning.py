@@ -11,21 +11,15 @@ class ShiftingFiles(FileSystemEventHandler):
     methods.
     """
     download_folders = ["photos", "documents", "folders", "music", "zipFiles",
-                        "videos", "others", "code", ".DS_Store"]
-    files = ["photos", "documents", "folders", "music", "zipFiles",
-             "videos", "others", "code", ".DS_Store"]
+                        "videos", "others", ".DS_Store"]
 
     # Overriding the on_modified() method of FileSystemEventHandler class
     # in the watchdog API
 
     def on_modified(self, event):
-        new_files = []
-        files = os.listdir(download_location)
-        for file in files:
-            if file not in self.download_folders:
-                new_files.append(file)
-        if len(new_files) > 0:
-            self.check_if_downloading()
+        self.check_if_downloading()
+        existing_files = os.listdir(download_location)
+        if existing_files != self.download_folders:
             self.shift()
 
     def shift(self):
@@ -82,63 +76,18 @@ class ShiftingFiles(FileSystemEventHandler):
         moment and then allows the script to shift the files.
         :return:
         """
-        new_files = self.get_folders()
-        print(new_files)
+        new_files = os.listdir(download_location)
         for file_name in new_files:
-            original_size = os.path.getsize(os.path.join(download_location,
-                                                         file_name))
             temp = file_name.split(".")
             file_ext = temp[len(temp) - 1]
-            # When download starts ".com.google.Chrome" is a temporary file
-            # created
             if ".com.google.Chrome" not in file_name:
-                # To check if any file is downloading as extensions are
-                # download and crdownload while downloading
                 if "crdownload" in file_ext or "download" in file_ext:
-                    print("in crdownload condition")
-                    # To check for the files that are already downloaded and
-                    # have a file extension of download/crdownload
-                    final_size = os.path.getsize(os.path.join(download_location,
-                                                              file_name))
-                    if final_size == original_size:
-                        self.check_downloaded(file_name, original_size)
-                        self.check_if_downloading()
-                    else:
-                        print("here")
-                        time.sleep(60)
-                        self.check_if_downloading()
+                    time.sleep(60)
+                    self.check_if_downloading()
             else:
                 time.sleep(5)
                 self.check_if_downloading()
-        self.files = self.download_folders.copy()
         return None
-
-    # def wait_until_downloaded(self, fil_name):
-
-    def check_downloaded(self, file_name, original_size):
-        """
-        This function is used to check if the files are already downloaded or
-        not by comparing size. This should be used when a file extension is
-        download or crdownload. We restrict the use as it is a bad way for
-        comparision
-        """
-        print("In check Downloaded")
-        time.sleep(5)
-        final_size = os.path.getsize(download_location + "/" + file_name)
-        if original_size == final_size:
-            return None
-        else:
-            self.check_downloaded(file_name, original_size)
-
-    def get_folders(self):
-        """Returns the folders/files as a list except the ones we create"""
-        new_files = []
-        files = os.listdir(download_location)
-        for file in files:
-            if file not in self.files:
-                self.files.append(file)
-                new_files.append(file)
-        return new_files
 
 
 def create_folders():
@@ -151,7 +100,7 @@ def create_folders():
 if __name__ == "__main__":
     # The folders that need to be created
     folders = ["photos", "documents", "folders", "music", "zipFiles", "videos",
-               "others", "code"]
+               "others", "codes"]
     # To create separate folders to organize data in
     create_folders()
 
