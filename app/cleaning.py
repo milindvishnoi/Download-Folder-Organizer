@@ -83,6 +83,7 @@ class ShiftingFiles(FileSystemEventHandler):
         :return:
         """
         new_files = self.get_folders()
+        print(new_files)
         for file_name in new_files:
             original_size = os.path.getsize(os.path.join(download_location,
                                                          file_name))
@@ -91,17 +92,19 @@ class ShiftingFiles(FileSystemEventHandler):
             # When download starts ".com.google.Chrome" is a temporary file
             # created
             if ".com.google.Chrome" not in file_name:
-                final_size = os.path.getsize(os.path.join(download_location,
-                                                              file_name))
                 # To check if any file is downloading as extensions are
                 # download and crdownload while downloading
                 if "crdownload" in file_ext or "download" in file_ext:
+                    print("in crdownload condition")
                     # To check for the files that are already downloaded and
                     # have a file extension of download/crdownload
+                    final_size = os.path.getsize(os.path.join(download_location,
+                                                              file_name))
                     if final_size == original_size:
                         self.check_downloaded(file_name, original_size)
                         self.check_if_downloading()
                     else:
+                        print("here")
                         time.sleep(60)
                         self.check_if_downloading()
             else:
@@ -110,6 +113,8 @@ class ShiftingFiles(FileSystemEventHandler):
         self.files = self.download_folders.copy()
         return None
 
+    # def wait_until_downloaded(self, fil_name):
+
     def check_downloaded(self, file_name, original_size):
         """
         This function is used to check if the files are already downloaded or
@@ -117,9 +122,9 @@ class ShiftingFiles(FileSystemEventHandler):
         download or crdownload. We restrict the use as it is a bad way for
         comparision
         """
+        print("In check Downloaded")
         time.sleep(5)
-        final_size = os.path.getsize(os.path.join(download_location,
-                                                         file_name))
+        final_size = os.path.getsize(download_location + "/" + file_name)
         if original_size == final_size:
             return None
         else:
