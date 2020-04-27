@@ -11,7 +11,7 @@ class ShiftingFiles(FileSystemEventHandler):
     methods.
     """
     download_folders = ["photos", "documents", "folders", "music", "zipFiles",
-                        "videos", "others", ".DS_Store"]
+                        "videos", "others", ".DS_Store", "code"]
 
     # Overriding the on_modified() method of FileSystemEventHandler class
     # in the watchdog API
@@ -34,8 +34,8 @@ class ShiftingFiles(FileSystemEventHandler):
                 if file_name not in folders:
                     if file_name != ".DS_Store":
                         transfer_folder = self.which_location(file_name)
-                        os.rename(os.path.join(download_location, file_name),
-                                  os.path.join(transfer_folder, file_name))
+                        os.rename(download_location +"/"+ file_name,
+                        transfer_folder +"/"+file_name)
         except FileNotFoundError:
             print("Error Occurred: Some thing went wrong!")
             print("Please run the script again, if the script stops")
@@ -100,7 +100,7 @@ def create_folders():
 if __name__ == "__main__":
     # The folders that need to be created
     folders = ["photos", "documents", "folders", "music", "zipFiles", "videos",
-               "others", "codes"]
+               "others", "code"]
     # To create separate folders to organize data in
     create_folders()
 
