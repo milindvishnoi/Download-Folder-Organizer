@@ -40,9 +40,11 @@ To download the dependencies required to run the "cleaning.command" scipt file u
 
 > pip3 install -r requirements.txt
 
-After this you need to give permission to the "cleaning.command" so that it can run on your computer. First you need to get into \*/DownloadCleaner/app by using terminal then run this command:
+After this you need to give permission to the "cleaning.command" to give read, write and execute files. First you need to get into \*/DownloadCleaner/app by using terminal then run this command:
 
 > chmod 755 cleaning.command
+
+Read more about chmod 755 by clicking [here](https://codefather.tech/blog/chmod-755-command/)
 
 ## <a name="use"></a> How To Use
 
