@@ -1,10 +1,9 @@
 <h1 align="center">
   <p align="center">Downloads Cleaner</p>
-  <p align="center" width="100%">
   <img src="/cleaner.png" width="200px" align="center">
-</p>
+</h1>
 
-A Mac based app used to keep your download folder organized.
+<h4 align="center">A Mac based app used to keep your download folder organized.</h4>
 
 ## Navigation
 - [Motivation](#motivation)
